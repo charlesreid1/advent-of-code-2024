@@ -34,3 +34,24 @@ the solution like so:
 
 If alternative instructions are required, they will be
 covered in a Readme in that day's folder.
+
+## Awk
+
+To run, go to the folder for the corresponding day,
+go to the `Awk/` subfolder,
+modify the `input` to match your input, and use `cat`
+to pass the file to awk via stdin:
+
+```
+cat example | ./solution.awk
+```
+
+If any input variables are required (for example, to
+run part 1 or part 2 separately), pass them using the
+`-v <var_name>=<var_value>` syntax:
+
+```
+cat example | ./solution.awk -v part=1
+cat example | ./solution.awk -v part=2
+```
+
