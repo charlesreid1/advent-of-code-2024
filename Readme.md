@@ -1,6 +1,8 @@
 # Advent of Code 2024
 
-<https://adventofcode.com/2024>
+My solutions to Advent of Code problems.
+
+Link: <https://adventofcode.com/2024>
 
 
 ## Python
@@ -18,5 +20,17 @@ python3 solution.py
 If alternative instructions are required, they will be
 covered in a Readme in that day's folder.
 
-Python is the default language used.
 
+## Bash
+
+To run, go to the folder for the corresponding day,
+go to the `Bash/` subfolder,
+modify the `input` to match your input, and run
+the solution like so:
+
+```
+./solution.sh
+```
+
+If alternative instructions are required, they will be
+covered in a Readme in that day's folder.
