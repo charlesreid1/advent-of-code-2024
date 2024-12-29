@@ -55,3 +55,19 @@ cat example | ./solution.awk -v part=1
 cat example | ./solution.awk -v part=2
 ```
 
+## Rust
+
+To run, go to the folder for the corresponding day,
+go to the `Rust/` subfolder,
+modify the `input` to match your input, and run the
+Rust program in `src/main.rs` by using the `cargo run`
+command:
+
+```
+# Run the debug version with no optimization
+cargo run
+
+# Run the optimized version
+cargo run --release
+```
+
