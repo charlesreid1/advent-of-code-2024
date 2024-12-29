@@ -1,10 +1,10 @@
 # Example input file
 # Should return distance = 11 and similarity = 31
-with open('example', 'r') as f:
+with open("example", "r") as f:
     lines = f.readlines()
 
 # Real input file (provided on advent of code site)
-with open('input', 'r') as f:
+with open("input", "r") as f:
     lines = f.readlines()
 
 left, right = [], []
@@ -25,7 +25,7 @@ sorted_left, sorted_right = sorted(left), sorted(right)
 
 distance = 0
 for a, b in zip(sorted_left, sorted_right):
-    d = abs(b-a)
+    d = abs(b - a)
     distance += d
 
 print(f"Part 1: Distance: {distance}")
@@ -51,5 +51,3 @@ for key_left in counter_left:
     similarity += s
 
 print(f"Part 2: Similarity: {similarity}")
-
-

@@ -2,11 +2,11 @@ import re
 
 # Example input file
 # Should return 161 when evaluated
-with open('example', 'r') as f:
+with open("example", "r") as f:
     lines = f.readlines()
 
 # Real input file (provided on advent of code site)
-with open('input', 'r') as f:
+with open("input", "r") as f:
     lines = f.readlines()
 
 # Mash everything into one line
@@ -20,14 +20,14 @@ where M and N are integers. Compute and return
 the sum of all products M*N.
 """
 
-p = re.compile(r'mul\((\d+),(\d+)\)')
+p = re.compile(r"mul\((\d+),(\d+)\)")
 
 sum_product = 0
 
-#for line in lines:
+# for line in lines:
 results = p.findall(oneline)
 for result in results:
-    sum_product += int(result[0])*int(result[1])
+    sum_product += int(result[0]) * int(result[1])
 
 print(f"Part 1: sum product: {sum_product}")
 
@@ -52,12 +52,12 @@ but this time, ignore any instructions occurring after a
 # - evaluate remainder with same funciton as before
 
 # Change .* to (.*?) to be non-greedy...
-oneline2 = re.sub('don\'t\(\)(.*?)do\(\)', '', oneline)
+oneline2 = re.sub("don't\(\)(.*?)do\(\)", "", oneline)
 
 sum_product = 0
 results = p.findall(oneline2)
 for result in results:
-    sum_product += int(result[0])*int(result[1])
+    sum_product += int(result[0]) * int(result[1])
 
 # This gives an incorrect result.
 
@@ -77,4 +77,3 @@ for op, x, y in re.findall("(mul\((\d+),(\d+)\)|do\(\)|don't\(\))", oneline2):
         sum_product += int(x) * int(y)
 
 print(f"Part 2: sum product with do()/don't(): {sum_product}")
-

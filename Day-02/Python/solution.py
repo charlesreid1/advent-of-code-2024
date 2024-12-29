@@ -2,11 +2,11 @@ import time
 
 # Example input file
 # Should return distance = 11 and similarity = 31
-with open('example', 'r') as f:
+with open("example", "r") as f:
     lines = f.readlines()
 
 # Real input file (provided on advent of code site)
-with open('input', 'r') as f:
+with open("input", "r") as f:
     lines = f.readlines()
 
 
@@ -18,18 +18,22 @@ Safe reports are monotonically increasing/decreasing by between 1 and 3.
 Return a count of safe reports.
 """
 
+
 def is_safe(row):
     rowint = [int(j) for j in row.split()]
-    diffs = [rowint[j] - rowint[j-1] for j in range(1,len(rowint))]
+    diffs = [rowint[j] - rowint[j - 1] for j in range(1, len(rowint))]
 
-    sign_ok = [(diffs[j]>0)==(diffs[j-1]>0) for j in range(1,len(diffs))]
-    value_ok = [(abs(diffs[j]) >= 1) and (abs(diffs[j]) <= 3) for j in range(len(diffs))]
+    sign_ok = [(diffs[j] > 0) == (diffs[j - 1] > 0) for j in range(1, len(diffs))]
+    value_ok = [
+        (abs(diffs[j]) >= 1) and (abs(diffs[j]) <= 3) for j in range(len(diffs))
+    ]
 
     if all(sign_ok):
         if all(value_ok):
             return True
 
     return False
+
 
 safe = 0
 for row in lines:
@@ -45,6 +49,7 @@ Modify Part 1 to allow for a single bad level in the
 increase/decrease between levels.
 """
 
+
 def is_safe_with_problem_dampener(row):
 
     if is_safe(row):
@@ -54,10 +59,10 @@ def is_safe_with_problem_dampener(row):
     # to see if any make the report safe.
     rowint = [int(j) for j in row.split()]
     for i in range(len(rowint)):
-        if i==len(rowint)-1:
+        if i == len(rowint) - 1:
             new_rowint = rowint[:i]
         else:
-            new_rowint = rowint[:i] + rowint[i+1:]
+            new_rowint = rowint[:i] + rowint[i + 1 :]
         # Convert list of integers to a string row for is_safe()
         new_row = " ".join([str(j) for j in new_rowint])
         if is_safe(new_row):
@@ -67,10 +72,10 @@ def is_safe_with_problem_dampener(row):
     # There is no way to make the report safe
     return False
 
+
 safe = 0
 for row in lines:
     if is_safe_with_problem_dampener(row):
         safe += 1
 
 print(f"Part 2: Safe reports with problem dampener: {safe}")
-
