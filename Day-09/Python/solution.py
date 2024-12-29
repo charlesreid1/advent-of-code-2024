@@ -1,12 +1,12 @@
 from collections import Counter, deque
 
 # Example input file
-with open('example', 'r') as f:
+with open("example", "r") as f:
     line = f.read()
 line = line.strip()
 
 # Real input file from AoC website
-with open('input', 'r') as f:
+with open("input", "r") as f:
     line = f.read()
 line = line.strip()
 
@@ -48,6 +48,7 @@ which yields 0*0 + 2*1 + 2*2 + 1*3 + 1*4 = checksum
 # - that gives us the compacted block representation
 # - can easily calculate checksum from there
 
+
 def compact_to_block(compact_repr: str):
     """
     Return block representation, but not as a string:
@@ -57,13 +58,13 @@ def compact_to_block(compact_repr: str):
     fileid = 0
     for i, c in enumerate(compact_repr):
         n = int(compact_repr[i])
-        if i%2==0:
+        if i % 2 == 0:
             # File
-            block += [fileid,]*n
+            block += [fileid,] * n
             fileid += 1
         else:
             # Free space
-            block += [None,]*n
+            block += [None,] * n
     return block
 
 
@@ -75,10 +76,10 @@ def block_to_str(block: list):
     s = []
     for i, b in enumerate(block):
         if b is None:
-            s.append('.')
+            s.append(".")
         else:
-            if b>9:
-                s.append(f'({b})')
+            if b > 9:
+                s.append(f"({b})")
             else:
                 s.append(str(b))
     return "".join(s)
@@ -97,20 +98,22 @@ def defrag(blocks: list):
     d = deque(blocks)
     while len(d) > 0:
         front = d.popleft()
-        if front!=None:
+        if front != None:
             defragged.append(front)
         else:
             # I don't like all these if statements...
             # There ought to be a cleaner way to do this
-            if len(d)>0:
+            if len(d) > 0:
                 back = d.pop()
-                if back==None:
+                if back == None:
                     # Keep popping until we get a non-null
-                    while back==None and len(d)>0:
+                    while back == None and len(d) > 0:
                         back = d.pop()
-                if back!=None:
+                if back != None:
                     defragged.append(back)
-    empty_space = [None,]*(len(blocks)-len(defragged))
+    empty_space = [
+        None,
+    ] * (len(blocks) - len(defragged))
     return defragged + empty_space
 
 
@@ -118,12 +121,12 @@ def checksum(defragged: list):
     checksum = 0
     for i, c in enumerate(defragged):
         if c != None:
-            checksum += c*i
+            checksum += c * i
     return checksum
 
 
 def test1():
-    # This should print 
+    # This should print
     # 0..111....22222
     print(block_to_str(compact_to_block("12345")))
 
@@ -175,20 +178,20 @@ def block_to_streak(blocks: list):
     """
     streaks = []
     for i, b in enumerate(blocks):
-        if i==0:
+        if i == 0:
             # Initialization
             current_item = b
             current_count = 1
-        elif b==current_item:
+        elif b == current_item:
             # Keep accumulating
             current_count += 1
-        elif b!=current_item:            
+        elif b != current_item:
             # Stash this streak and start a new one
             streaks.append((current_item, current_count))
             current_item = b
             current_count = 1
 
-        if i==len(blocks)-1:
+        if i == len(blocks) - 1:
             streaks.append((current_item, current_count))
     return streaks
 
@@ -196,7 +199,9 @@ def block_to_streak(blocks: list):
 def streak_to_block(streaks: list):
     blocks = []
     for i, (streakelem, streaklen) in enumerate(streaks):
-        blocks += [streakelem,]*streaklen
+        blocks += [
+            streakelem,
+        ] * streaklen
     return blocks
 
 
@@ -215,7 +220,7 @@ def defrag_smarter(blocks: list):
     for fileid, filesize in allids:
         # Start looking for an open space of size filesize or more
         for j, s in enumerate(new_streaks):
-            if s[0]==None and s[1]>=filesize:
+            if s[0] == None and s[1] >= filesize:
                 beginning = new_streaks[:j]
 
                 middle = [(fileid, filesize)]
@@ -223,12 +228,14 @@ def defrag_smarter(blocks: list):
                     middle += [(None, s[1] - filesize)]
 
                 # We inserted new blocks, have to get rid of old blocks
-                end = [z if z[0]!=fileid else (None, z[1]) for z in new_streaks[j+1:] ]
+                end = [
+                    z if z[0] != fileid else (None, z[1]) for z in new_streaks[j + 1 :]
+                ]
 
                 new_streaks = beginning + middle + end
                 break
 
-            if s[0]==fileid:
+            if s[0] == fileid:
                 # This is here because, at some point,
                 # we could end up trying to insert a file
                 # at a space past its current position.
@@ -246,7 +253,11 @@ def test2():
     # These should both print the same thing:
     # 00...111...2...333.44.5555.6666.777.888899
     print(block_to_str(compact_to_block("2333133121414131402")))
-    print(block_to_str(streak_to_block(block_to_streak(compact_to_block("2333133121414131402")))))
+    print(
+        block_to_str(
+            streak_to_block(block_to_streak(compact_to_block("2333133121414131402")))
+        )
+    )
 
     # This should return:
     # 00992111777.44.333....5555.6666.....8888..
