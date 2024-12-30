@@ -3,21 +3,21 @@ from collections import defaultdict
 
 # Example input file
 # Should return 14 unique antinode locations for part 1
-with open('example', 'r') as f:
+with open("example", "r") as f:
     lines = f.readlines()
 
 # Part 1 simple example input file
 # Should return 2 unique antinode locations for part 1
-with open('example2', 'r') as f:
+with open("example2", "r") as f:
     lines = f.readlines()
 
 # Part 2 simple example input file
 # Should return 9 unique antinode locations for part 2
-with open('example3', 'r') as f:
+with open("example3", "r") as f:
     lines = f.readlines()
 
 # Real input file (provided on advent of code site)
-with open('input', 'r') as f:
+with open("input", "r") as f:
     lines = f.readlines()
 
 NROWS = len(lines)
@@ -62,7 +62,7 @@ def draw_grid(locs):
         line = lines[i].strip()
         newline = ""
         for j in range(len(line)):
-            if line[j]=='.':
+            if line[j] == ".":
                 if (i, j) in locs:
                     newline += "#"
                 else:
@@ -75,12 +75,12 @@ def draw_grid(locs):
 def eliminate_invalid_antinodes(all_locs):
     valid_locs = set()
     for loc in all_antinode_locs:
-        c1 = loc[0] >= 0 and loc[0] <= NROWS-1
-        c2 = loc[1] >= 0 and loc[1] <= NCOLS-1
+        c1 = loc[0] >= 0 and loc[0] <= NROWS - 1
+        c2 = loc[1] >= 0 and loc[1] <= NCOLS - 1
         if c1 and c2:
             valid_locs.add(loc)
     valid_locs = list(valid_locs)
-    valid_locs.sort(key = lambda x: x[0])
+    valid_locs.sort(key=lambda x: x[0])
     return valid_locs
 
 
@@ -96,8 +96,8 @@ for frequency in antenna_map.keys():
     # Iterate pairwise over each antenna location
     antenna_locs = antenna_map[frequency]
     for i in range(len(antenna_locs)):
-        for j in range(i+1, len(antenna_locs)):
-            if antenna_locs[i]==antenna_locs[j]:
+        for j in range(i + 1, len(antenna_locs)):
+            if antenna_locs[i] == antenna_locs[j]:
                 continue
             anti1, anti2 = antinode_locations(antenna_locs[i], antenna_locs[j])
             all_antinode_locs.update([anti1, anti2])
@@ -116,6 +116,7 @@ exactly in line with at least two antennas of the
 same frequency, regardless of distance.
 """
 
+
 def extended_antinode_locations(p1, p2):
     r1, c1 = p1
     r2, c2 = p2
@@ -124,11 +125,12 @@ def extended_antinode_locations(p1, p2):
     dx = c2 - c1
 
     antis = []
-    for i in range(0, max(NROWS//dy, NCOLS//dx) + 1):
-        antis.append((r1 - i*dy, c1 - i*dx))
-        antis.append((r2 + i*dy, c2 + i*dx))
+    for i in range(0, max(NROWS // dy, NCOLS // dx) + 1):
+        antis.append((r1 - i * dy, c1 - i * dx))
+        antis.append((r2 + i * dy, c2 + i * dx))
 
     return antis
+
 
 # Iterate over each frequency
 all_antinode_locs = set()
@@ -136,8 +138,8 @@ for frequency in antenna_map.keys():
     # Iterate pairwise over each antenna location
     antenna_locs = antenna_map[frequency]
     for i in range(len(antenna_locs)):
-        for j in range(i+1, len(antenna_locs)):
-            if antenna_locs[i]==antenna_locs[j]:
+        for j in range(i + 1, len(antenna_locs)):
+            if antenna_locs[i] == antenna_locs[j]:
                 continue
             antis = extended_antinode_locations(antenna_locs[i], antenna_locs[j])
             all_antinode_locs.update(antis)
