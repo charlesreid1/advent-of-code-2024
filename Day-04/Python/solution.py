@@ -161,17 +161,13 @@ for i in range(rowmin, rowmax):
         # Check if center of X is "A"
         if grid[i + 1][j + 1] == magic_word[1]:
             # Diagonal: upper left to lower right
-            check1 = (
-                grid[i][j] == magic_word[0] and grid[i + 2][j + 2] == magic_word[2]
-            ) or (grid[i][j] == magic_word[2] and grid[i + 2][j + 2] == magic_word[0])
-            if check1:
+            g1 = grid[i][j] == magic_word[0] and grid[i + 2][j + 2] == magic_word[2]
+            g2 = grid[i][j] == magic_word[2] and grid[i + 2][j + 2] == magic_word[0]
+            if g1 or g2:
                 # Diagonal: lower left to upper right
-                check2 = (
-                    grid[i][j + 2] == magic_word[0] and grid[i + 2][j] == magic_word[2]
-                ) or (
-                    grid[i][j + 2] == magic_word[2] and grid[i + 2][j] == magic_word[0]
-                )
-                if check2:
+                g3 = grid[i][j + 2] == magic_word[0] and grid[i + 2][j] == magic_word[2] 
+                g4 = grid[i][j + 2] == magic_word[2] and grid[i + 2][j] == magic_word[0]
+                if g3 or g4:
                     xcount += 1
 
 print(f"Part 2: number of X-MAS cocurrences: {xcount}")
