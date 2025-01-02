@@ -17,16 +17,16 @@ public class Solution {
         Solution solution = new Solution();
 
         try {
-            // // This should return 1 trailhead, score of 2
+            // // This should return 1 trailhead, score of 2 (part 1)
             // String filename = "example";
 
-            // // This should return 1 trailhead, score of 4
+            // // This should return 1 trailhead, score of 4 (part 1)
             // String filename = "example2";
 
-            // // This should return 2 trailheads, scores of 1 and 2
+            // // This should return 2 trailheads, scores of 1 and 2 (part 1)
             // String filename = "example3";
 
-            // // This should return 9 trailheads, score of 36
+            // // This should return 9 trailheads, score of 36 (part 1)
             // String filename = "example4";
 
             // This uses the real input from AoC website
@@ -37,6 +37,10 @@ public class Solution {
             // Solve part 1
             long result1 = solution.solvePart1(grid);
             System.out.println("Part 1 Solution: " + result1);
+
+            // Solve part 2
+            long result2 = solution.solvePart2(grid);
+            System.out.println("Part 2 Solution: " + result2);
 
         } catch (IOException e) {
             System.err.println("Error reading input file: " + e.getMessage());
@@ -53,8 +57,39 @@ public class Solution {
      * The score of a trailhead is the number of 9 squares
      * that can be reached from that trailhead, by only
      * following horizontal/vertical step changes of 1.
+     *
+     * For part 1, only count the distinct destinations,
+     * not the distinct paths.
      */
     private long solvePart1(int[][] grid) {
+        boolean isPart1 = true;
+        return solve(grid, isPart1);
+    }
+
+    /*
+     * Part 2:
+     * Given a topological map consisting of a grid of
+     * integers (0=trailhead, 1=low, 9=high),
+     * determine the score of each trailhead.
+     *
+     * The score of a trailhead is the number of 9 squares
+     * that can be reached from that trailhead, by only
+     * following horizontal/vertical step changes of 1.
+     *
+     * For part 2, count distinct paths, not just destinations.
+     */
+    private long solvePart2(int[][] grid) {
+        boolean isPart1 = false;
+        return solve(grid, isPart1);
+    }
+
+    /*
+     * Convenience wrapper, basically just changes one parameter
+     * in the recursive function call based on whether it is
+     * part 1 or part 2.
+     */
+    private long solve(int[][] grid, boolean isPart1) {
+
         // Solution Approach:
         // - get trailhead locations
         // - call recursive method doing breadth-first search
@@ -63,7 +98,7 @@ public class Solution {
         // - base case is 8, return 1 if 9 there, return 0 otherwise
         // - also need to accumulate a list of grid points in this path
 
-        // To store grid locations, use ArrayList of 2-element int arrays
+        // Note: to store grid locations, use ArrayList of 2-element int arrays
 
         // Stash trailhead locations
         ArrayList<int[]> trailheads = new ArrayList<>();
@@ -74,14 +109,14 @@ public class Solution {
                 }
             }
         }
-        System.out.println("Found " + trailheads.size() + " trailhead(s)");
+        // System.out.println("Found " + trailheads.size() + " trailhead(s)");
 
         // Accumulate trailhead scores
         long scores = 0;
         for (int i = 0; i < trailheads.size(); i++) {
             ArrayList<int[]> breadcrumbs = new ArrayList<>();
             ArrayList<int[]> nines = new ArrayList<>();
-            long score = getTrailheadScore(grid, trailheads.get(i), breadcrumbs, nines);
+            long score = getTrailheadScore(grid, trailheads.get(i), breadcrumbs, nines, isPart1);
             // System.out.println("Trailhead at " + trailheads.get(i)[0] + ", " + trailheads.get(i)[1] + " has score " + score);
             scores += score;
         }
@@ -102,7 +137,7 @@ public class Solution {
      * but also have to keep track of the 9 peaks that we have already seen
      * independent of the current trail.
      */
-    private long getTrailheadScore(int[][] grid, int[] currentLoc, ArrayList<int[]> breadcrumbs, ArrayList<int[]> nines) {
+    private long getTrailheadScore(int[][] grid, int[] currentLoc, ArrayList<int[]> breadcrumbs, ArrayList<int[]> nines, boolean isPart1) {
         // Temporarliy add this location to the breadcrumb trail
         breadcrumbs.add(currentLoc);
 
@@ -124,8 +159,8 @@ public class Solution {
                         reached = true;
                     }
                 }
-                if (!reached) {
-                    // This nine has not been reached before
+                if (!reached || !isPart1) {
+                    // This nine has not been reached before, or this is a unique path
                     score = 1;
                     nines.add(currentLoc);
                 }
@@ -135,7 +170,7 @@ public class Solution {
             if (n[0]>=0 && n[0]<grid.length && n[1]>=0 && n[1]<grid[0].length) {
                 if (grid[n[0]][n[1]]==breadcrumbs.size()) {
                     if (!breadcrumbs.contains(n)) {
-                        score += getTrailheadScore(grid, n, breadcrumbs, nines);
+                        score += getTrailheadScore(grid, n, breadcrumbs, nines, isPart1);
                     }
                 }
             }
@@ -143,7 +178,7 @@ public class Solution {
             if (e[0]>=0 && e[0]<grid.length && e[1]>=0 && e[1]<grid[0].length) {
                 if (grid[e[0]][e[1]]==breadcrumbs.size()) {
                     if (!breadcrumbs.contains(e)) {
-                        score += getTrailheadScore(grid, e, breadcrumbs, nines);
+                        score += getTrailheadScore(grid, e, breadcrumbs, nines, isPart1);
                     }
                 }
             }
@@ -151,7 +186,7 @@ public class Solution {
             if (s[0]>=0 && s[0]<grid.length && s[1]>=0 && s[1]<grid[0].length) {
                 if (grid[s[0]][s[1]]==breadcrumbs.size()) {
                     if (!breadcrumbs.contains(s)) {
-                        score += getTrailheadScore(grid, s, breadcrumbs, nines);
+                        score += getTrailheadScore(grid, s, breadcrumbs, nines, isPart1);
                     }
                 }
             }
@@ -159,7 +194,7 @@ public class Solution {
             if (w[0]>=0 && w[0]<grid.length && w[1]>=0 && w[1]<grid[0].length) {
                 if (grid[e[0]][w[1]]==breadcrumbs.size()) {
                     if (!breadcrumbs.contains(w)) {
-                        score += getTrailheadScore(grid, w, breadcrumbs, nines);
+                        score += getTrailheadScore(grid, w, breadcrumbs, nines, isPart1);
                     }
                 }
             }
