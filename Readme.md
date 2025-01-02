@@ -71,3 +71,14 @@ cargo run
 cargo run --release
 ```
 
+## Java
+
+To run, go to the folder for the corresponding day,
+go to the `Java/` subfolder,
+modify the `input` to match your input, and compile
+and run the Java program in `Solution.java` with
+these two steps:
+
+```
+javac Solution.java && java Solution
+```
