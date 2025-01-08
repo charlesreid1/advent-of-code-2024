@@ -100,3 +100,46 @@ for m, (ax, ay, bx, by, px, py) in enumerate(machines):
     solution += min_cost
 
 print(f"Part 1: total min cost = {solution}")
+
+
+"""
+Part 2:
+Solve a system of 2 equations and 2 unknowns.
+
+A = number of A button presses
+X_A = x change for button A press
+Y_A = y change for button A press
+
+B = number of B button presses
+X_B = x change for button B press
+Y_B = y change for button B press
+
+P_X = x location of prize
+P_Y = y locaiton of prize
+
+-----------------
+
+A * X_A + B * X_B = P_X
+A * Y_A + B * Y_B = P_Y
+"""
+
+OFFSET = 10000000000000
+
+def convert_input_part2(part1):
+    new_input = []
+    for m in part1:
+        new_input.append((m[0], m[1], m[2], m[3], m[4]+OFFSET, m[5]+OFFSET))
+    return new_input
+
+machines = convert_input_part2(parse_input(lines))
+
+solution = 0
+for m, (ax, ay, bx, by, px, py) in enumerate(machines):
+
+    a = (px*by - py*bx)/(ax*by - ay*bx)
+    b = (ax*py - ay*px)/(ax*by - ay*bx)
+    if a > 0 and b > 0 and a==int(a) and b==int(b):
+        solution += int(3*a + b)
+
+print(f"Part 2: total min cost = {solution}")
+
